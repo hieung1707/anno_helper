@@ -74,15 +74,16 @@ if __name__ == "__main__":
     """
     argv 1: folder containing eaf file
     argv 2: output file, currently unused
-    argv 3: skip n - 1 segments from the start
+    argv 3: skip n - 1 segments from the start (optional)
     """
 
-    if len(argv) < 4:
+    if len(argv) < 3:
         print('not enough arguments')
         exit()
     folder = argv[1]
     output_file = argv[2]
-    if len(argv) ==
+    if len(argv) == 4:
+        skip_count = argv[3]
     txt_files = glob.glob('{}/*.txt'.format(folder))
     csv_files = glob.glob('{}/*.csv'.format(folder))
     eaf_files = glob.glob('{}/*.eaf'.format(folder))
@@ -117,7 +118,7 @@ if __name__ == "__main__":
         else:
             labels.append('')
         if labels[0] in ['DG'] or labels[1] in ['LN2', 'LC2']:
-            if skip < :
+            if skip < skip_count:
                 skip += 1
                 continue
             title = ''
