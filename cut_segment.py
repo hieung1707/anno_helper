@@ -69,12 +69,20 @@ def plot_subplot_skip(subplot, times, acc_x, acc_y, acc_z, org_freq, new_freq, s
 
 if __name__ == "__main__":
     skip = 0
+    skip_count = 0
     argv = sys.argv
+    """
+    argv 1: folder containing eaf file
+    argv 2: output file, currently unused
+    argv 3: skip n - 1 segments from the start
+    """
+
     if len(argv) < 4:
         print('not enough arguments')
         exit()
     folder = argv[1]
     output_file = argv[2]
+    if len(argv) ==
     txt_files = glob.glob('{}/*.txt'.format(folder))
     csv_files = glob.glob('{}/*.csv'.format(folder))
     eaf_files = glob.glob('{}/*.eaf'.format(folder))
@@ -109,7 +117,7 @@ if __name__ == "__main__":
         else:
             labels.append('')
         if labels[0] in ['DG'] or labels[1] in ['LN2', 'LC2']:
-            if skip < int(argv[3]):
+            if skip < :
                 skip += 1
                 continue
             title = ''
