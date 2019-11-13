@@ -70,6 +70,24 @@ def get_label_data(input_file, timestamps_txt, output_file, time_offset=0):
     output.to_csv(output_file, sep='\t', header=None, encoding='utf-8', index=False)
 
 
+def extract(input_csv, timestamps_txt, eaf_file, output_csv):
+    df = pd.read_csv(input_csv, delimiter='\t')
+    output = df[['accelerometerTimestamp_sinceReboot(s)',
+                 'accelerometerAccelerationX(G)',
+                 'accelerometerAccelerationY(G)',
+                 'accelerometerAccelerationZ(G)',
+                 'motionRotationRateX(rad/s)',
+                 'motionRotationRateY(rad/s)',
+                 'motionRotationRateZ(rad/s)']]
+    print(len(output))
+    time_offset = get_time_offset(eaf_file=eaf_file)
+    print(time_offset)
+    labels_np = get_labels(timestamps_txt, time_offset, len(output), output)
+    print(labels_np.shape)
+    output['label'] = labels_np
+    output.to_csv(output_csv, sep='\t')
+
+
 if __name__ == "__main__":
     # folders = glob.glob('/home/hieung1707/Downloads/data_11_11_19/part2/*')
     # label_dir = '/home/hieung1707/labels'
@@ -86,30 +104,7 @@ if __name__ == "__main__":
     #         os.mkdir('{}/{}'.format(label_dir, folder_name))
     #     get_label_data(data_50hz, '{}/{}.txt'.format(folder, folder_name), '{}/{}/label1.txt'.format(label_dir, folder_name), time_offset)
     #     get_label_data(data_other, '{}/{}.txt'.format(folder, folder_name), '{}/{}/label2.txt'.format(label_dir, folder_name), time_offset)
+    root_folder = '/home/hieung1707/Downloads/data_11_11_19/part2/15_58_17'
 
-    argv = sys.argv
-    """
-    argv_1: input csv file
-    argv_2: timestamp file
-    argv_3: output csv_file
-    """
-    if len(argv) < 4:
-        print('not enough arguments')
-        exit(0)
-    input_file = argv[1]
-    timestamps_txt = argv[2]
-    output_file = argv[3]
-    df = pd.read_csv(input_file, delimiter='\t')
-    output = df[['accelerometerTimestamp_sinceReboot(s)',
-                 'accelerometerAccelerationX(G)',
-                 'accelerometerAccelerationY(G)',
-                 'accelerometerAccelerationZ(G)',
-                 'motionRotationRateX(rad/s)',
-                 'motionRotationRateY(rad/s)',
-                 'motionRotationRateZ(rad/s)']]
-    print(len(output))
-    labels_np = get_labels(timestamps_txt, len(output), output)
-    print(labels_np.shape)
-    output['label'] = labels_np
-    output.to_csv(output_file, sep='\t')
+    extract('{}/W01 191111 15_58_17.csv'.format(root_folder), '{}/15_58_17.txt'.format(root_folder), '{}/15_58_17.eaf'.format(root_folder), '{}/test.csv'.format(root_folder))
 
